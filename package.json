@@ -1,0 +1,16 @@
+{
+  "name": "audible-scraper",
+  "version": "1.0.0",
+  "description": "A web scrapper for audio books on Audible.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jordon McKoy",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.1",
+    "request": "^2.83.0"
+  }
+}
