@@ -6,16 +6,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _graphqlTools = require('graphql-tools');
 
-var _mocks = require('./mocks');
+var _resolvers = require('./resolvers');
 
-var _mocks2 = _interopRequireDefault(_mocks);
+var _resolvers2 = _interopRequireDefault(_resolvers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var typeDefs = '\n  type Item {\n    id: Int\n    title: String\n    price: Float\n    url: String\n  }\n  type Query {\n    item(title: String, price: Float, url: String): Item\n    testString: String\n  }\n';
+// Mock api
+/*import mocks from './mocks';
 
-var schema = (0, _graphqlTools.makeExecutableSchema)({ typeDefs: typeDefs });
+addMockFunctionsToSchema({ schema, mocks });*/
 
-(0, _graphqlTools.addMockFunctionsToSchema)({ schema: schema, mocks: _mocks2.default });
+var typeDefs = '\n  type Item {\n    id: Int\n    title: String\n    price: Float\n    url: String\n  }\n  type Query {\n    item(title: String, price: Float, url: String): Item\n  }\n';
+
+var schema = (0, _graphqlTools.makeExecutableSchema)({ typeDefs: typeDefs, resolvers: _resolvers2.default });
 
 exports.default = schema;
