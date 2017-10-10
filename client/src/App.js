@@ -1,18 +1,38 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+
+import {
+  Card,
+  DisplayText,
+  Layout
+} from '@shopify/polaris';
+
+import { ItemForm } from './components';
+
+import '@shopify/polaris/styles.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <DisplayText size='large'>Amazon Product Tracker</DisplayText>
+        <Layout>
+          <Layout.Section>
+            <Layout.AnnotatedSection
+              title="Add Product"
+              description="Add a product from Amazon to the list of tracked prices">
+              <Card sectioned>
+                <ItemForm />
+              </Card>
+            </Layout.AnnotatedSection>
+            <Layout.AnnotatedSection
+              title="My Products"
+              description="List of currently tracked products with their price changes over time">
+              <Card sectioned>
+
+              </Card>
+            </Layout.AnnotatedSection>
+          </Layout.Section>
+        </Layout>
       </div>
     );
   }
