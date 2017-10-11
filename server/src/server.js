@@ -4,41 +4,28 @@ import logger from 'morgan';
 import request from 'request';
 import cheerio from 'cheerio';
 
-import graphqlHTTP from 'express-graphql';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { buildSchema } from 'graphql';
 import bodyParser from 'body-parser';
 
-import Sequelize from './connector';
+import { db } from './db';
 
 const GRAPHQL_PORT = parseInt(process.env.GRAPHQL_PORT, 10) || 3000;
 
 var app = express();
 
-import schema from './data/schema';
+import schema from './graphql/schema';
 
-app.use('/graphql', graphqlHTTP({
+app.use('/graphql', bodyParser.json(), graphqlExpress({
   schema: schema,
-  rootValue: global,
-  graphiql: true
-}));
-
-app.listen(4000, () => console.log('Now listening on localhost:4000/graphql'))
-
-app.get('/database', function(req, res){
-  Sequelize
-    .authenticate()
-    .then(() => {
-      console.log('Connection has been established successfully.');
-    })
-    .catch(err => {
-      console.error('Unable to connect to the database', err);
-    });
-});
+  context: {
+    db
+  }
+})),
+app.get('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 app.get('/scrape', function(req, res){
-  let url = "https://www.amazon.ca/Three-Simple-Steps-Success-Business/dp/1936661713/ref=sr_1_1?ie=UTF8&qid=1507562266&sr=8-1&keywords=Three+Simple+Steps";
-
-  request(url, function(error, response, html){
+  request(req.url, function(error, response, html){
     // Define our data attributes
     var title, price, author, narrator, length;
     var json = { title : "", price : "" };

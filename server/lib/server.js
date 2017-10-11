@@ -20,9 +20,7 @@ var _cheerio = require('cheerio');
 
 var _cheerio2 = _interopRequireDefault(_cheerio);
 
-var _expressGraphql = require('express-graphql');
-
-var _expressGraphql2 = _interopRequireDefault(_expressGraphql);
+var _apolloServerExpress = require('apollo-server-express');
 
 var _graphql = require('graphql');
 
@@ -30,11 +28,9 @@ var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _connector = require('./connector');
+var _db = require('./db');
 
-var _connector2 = _interopRequireDefault(_connector);
-
-var _schema = require('./data/schema');
+var _schema = require('./graphql/schema');
 
 var _schema2 = _interopRequireDefault(_schema);
 
@@ -44,29 +40,15 @@ var GRAPHQL_PORT = parseInt(process.env.GRAPHQL_PORT, 10) || 3000;
 
 var app = (0, _express2.default)();
 
-app.use('/graphql', (0, _expressGraphql2.default)({
+app.use('/graphql', _bodyParser2.default.json(), (0, _apolloServerExpress.graphqlExpress)({
   schema: _schema2.default,
-  rootValue: global,
-  graphiql: true
-}));
-
-app.listen(4000, function () {
-  return console.log('Now listening on localhost:4000/graphql');
-});
-
-app.get('/test', function (req, res) {
-  // console.warn(Sequelize);
-  _connector2.default.authenticate().then(function () {
-    console.log('Connection has been established successfully.');
-  }).catch(function (err) {
-    console.error('Unable to connect to the database', err);
-  });
-});
+  context: {
+    db: _db.db
+  }
+})), app.get('/graphiql', (0, _apolloServerExpress.graphiqlExpress)({ endpointURL: '/graphql' }));
 
 app.get('/scrape', function (req, res) {
-  var url = "https://www.amazon.ca/Three-Simple-Steps-Success-Business/dp/1936661713/ref=sr_1_1?ie=UTF8&qid=1507562266&sr=8-1&keywords=Three+Simple+Steps";
-
-  (0, _request2.default)(url, function (error, response, html) {
+  (0, _request2.default)(req.url, function (error, response, html) {
     // Define our data attributes
     var title, price, author, narrator, length;
     var json = { title: "", price: "" };
