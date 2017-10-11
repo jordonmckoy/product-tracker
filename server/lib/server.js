@@ -30,6 +30,10 @@ var _bodyParser = require('body-parser');
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
+var _connector = require('./connector');
+
+var _connector2 = _interopRequireDefault(_connector);
+
 var _schema = require('./data/schema');
 
 var _schema2 = _interopRequireDefault(_schema);
@@ -50,8 +54,17 @@ app.listen(4000, function () {
   return console.log('Now listening on localhost:4000/graphql');
 });
 
+app.get('/test', function (req, res) {
+  // console.warn(Sequelize);
+  _connector2.default.authenticate().then(function () {
+    console.log('Connection has been established successfully.');
+  }).catch(function (err) {
+    console.error('Unable to connect to the database', err);
+  });
+});
+
 app.get('/scrape', function (req, res) {
-  url = "https://www.amazon.ca/Three-Simple-Steps-Success-Business/dp/1936661713/ref=sr_1_1?ie=UTF8&qid=1507562266&sr=8-1&keywords=Three+Simple+Steps";
+  var url = "https://www.amazon.ca/Three-Simple-Steps-Success-Business/dp/1936661713/ref=sr_1_1?ie=UTF8&qid=1507562266&sr=8-1&keywords=Three+Simple+Steps";
 
   (0, _request2.default)(url, function (error, response, html) {
     // Define our data attributes

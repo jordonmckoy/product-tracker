@@ -8,6 +8,8 @@ import graphqlHTTP from 'express-graphql';
 import { buildSchema } from 'graphql';
 import bodyParser from 'body-parser';
 
+import Sequelize from './connector';
+
 const GRAPHQL_PORT = parseInt(process.env.GRAPHQL_PORT, 10) || 3000;
 
 var app = express();
@@ -22,8 +24,19 @@ app.use('/graphql', graphqlHTTP({
 
 app.listen(4000, () => console.log('Now listening on localhost:4000/graphql'))
 
+app.get('/database', function(req, res){
+  Sequelize
+    .authenticate()
+    .then(() => {
+      console.log('Connection has been established successfully.');
+    })
+    .catch(err => {
+      console.error('Unable to connect to the database', err);
+    });
+});
+
 app.get('/scrape', function(req, res){
-  url = "https://www.amazon.ca/Three-Simple-Steps-Success-Business/dp/1936661713/ref=sr_1_1?ie=UTF8&qid=1507562266&sr=8-1&keywords=Three+Simple+Steps";
+  let url = "https://www.amazon.ca/Three-Simple-Steps-Success-Business/dp/1936661713/ref=sr_1_1?ie=UTF8&qid=1507562266&sr=8-1&keywords=Three+Simple+Steps";
 
   request(url, function(error, response, html){
     // Define our data attributes
