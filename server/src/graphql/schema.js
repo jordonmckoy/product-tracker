@@ -4,9 +4,6 @@ import {
 import resolvers from './resolvers';
 
 const typeDefs = `
-  type Products {
-    products: [Product]
-  }
   type Product {
     id: ID
     title: String
@@ -14,8 +11,8 @@ const typeDefs = `
     url: String
   }
   type Query {
-    product(id: ID, title: String, price: Float, url: String): Product
-    products: Products
+    product(id: ID, title: String, price: Float, url: String): Product,
+    products: [Product]
   }
 `;
 
