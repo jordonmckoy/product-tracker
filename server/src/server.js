@@ -1,3 +1,8 @@
+import dotenv from 'dotenv';
+
+// Init env variables
+dotenv.config();
+
 import express from 'express';
 import fs from 'fs';
 import logger from 'morgan';
